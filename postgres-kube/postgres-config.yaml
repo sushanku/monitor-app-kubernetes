@@ -1,0 +1,11 @@
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "postgres-config"
+  labels:
+    app: "postgres"
+data:
+  # POSTGRES_DB: "monitor_db"
+  # POSTGRES_USER: "sushanku"
+  # POSTGRES_PASSWORD: "monitor01"
+  .secrets: UE9TVEdSRVNfREI6ICJtb25pdG9yX2RiIgpQT1NUR1JFU19VU0VSOiAic3VzaGFua3UiClBPU1RHUkVTX1BBU1NXT1JEOiAibW9uaXRvcjAxIg==
