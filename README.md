@@ -1,5 +1,6 @@
-# monitor-app-kubernetes
-A guide on deploying this simple server's file monitoring app which uses flask and postgres.
+# monitor-app-kubernetes 
+**App Info**: This simple application allows you to upload the file and monitors those uploaded file.
+A guide on deploying this simple server's file monitoring app which uses flask and postgres. 
 
 ---
 
@@ -23,13 +24,13 @@ For testing purpose you may use Docker Desktop in which Kubernetes is installed.
 2. Build docker image (`docker build -t ${tagname} .`)
 3. Push image to your dockerhub account. (`docker push ${tagname}`)
    
-Note the image tag name here, which will be used in Kubernetes manifest file for flask
-Here is the sample code to do it:
+Note the image tag name here. This image tag name will be used in Kubernetes manifest file for flask.  
+cmdline instructions to build and push docker image:  
 
 ```
- cd monitor-app
- docker build -t sushanku/flask-monitor-app:latest .
- docker push sushanku/flask-monitor-app:latest
+cd monitor-app
+docker build -t sushanku/flask-monitor-app:latest .
+docker push sushanku/flask-monitor-app:latest
 ```
 
 ---
@@ -39,6 +40,9 @@ This flask app is first built with Docker and pushed it to the public dockerhub 
 You can increase the replica in deployment manifest file but the app stores some data like uploaded files and profile picture. For now to make it simple, let's deploy pods with 1 replica only.  
 This app also needs the environment variables like Database host, port, username, password etc which is handled by configMap resources. configMap allows you to decouple your hardcorded environment variable in the application code. For username, password or any critical information it is best to use Kuberenetes secret resource or Hashicorp vault.  
 To expose the app locally, `loadbalancer` service type is used. This exposes your appilcation in `localhost:5000`. You may learn more about exposing your services using different ports and service type here. [Networking Service](https://kubernetes.io/docs/concepts/services-networking/service/)
+
+**Note:** Do not forget to change the volume path in postgres-volume.yaml.  
+Make sure the directory exists. Here is the reference  `path: "/Users/example/Desktop/kubedata"`
 
 Lets create the flask config, service and deployment 
 ```
@@ -66,11 +70,16 @@ The above kubectl apply command will apply all the manifests file in postgres-ku
 ---
 
 ## Endpoints
-- **sign up**: http://localhost:5000/register 
-- **login**: http://localhost:5000/login
-- **dashboard**: http://localhost:5000/dashboard.html
-- **file list**: http://localhost:5000/file_list.html
+- **sign up**: http://localhost:5000/register  
+  Sign Up page
+- **login**: http://localhost:5000/login  
+  Login page
+- **file list**: http://localhost:5000/file_list.html  
+  Page from where you can upload the file. This same page will display the uploaded file information(name, filesize, filetype, action to delete the file)
+- **dashboard**: http://localhost:5000/dashboard.html  
+  Dashboard where uploaded file count will be displayed on the basis of daily, weekly, monthly.
 
+---
 
 ## TO DO's
 These are the few suggestions for the enhancement of this application
