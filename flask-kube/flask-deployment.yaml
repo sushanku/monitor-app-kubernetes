@@ -18,6 +18,8 @@ spec:
       containers:
       - name: "flask"
         image: "sushanku/flask-monitor-app:latest"
+        ports:
+          - containerPort: 5000
         resources:
           limits:
             memory: 512Mi
