@@ -8,3 +8,4 @@ data:
   POSTGRES_DB: "monitor_db"
   POSTGRES_USER: "sushanku"
   POSTGRES_PASSWORD: "monitor01"
+  PGDATA: "/var/lib/postgresql/data/pgdata"
