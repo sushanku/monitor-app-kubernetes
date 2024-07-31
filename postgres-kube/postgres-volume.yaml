@@ -12,3 +12,6 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "/home/sushan/kubedata"
+
+
+# for EKS cluster this physical volume is not needed. EKS provisions the physical volume.
