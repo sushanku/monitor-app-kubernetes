@@ -7,7 +7,7 @@ config:
 monitor:
   flask:
     image:
-      repository: sushanku/flask-monitor-app
+      repository: sushanku/flask-monitor-app-v4
       tag: latest
     port:
       containerPort: 5000
