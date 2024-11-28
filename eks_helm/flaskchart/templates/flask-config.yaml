@@ -7,9 +7,6 @@ metadata:
 data:
   DB_ENGINE: {{ .Values.config.dbEngine | quote }}
   DB_HOST: {{ .Values.config.dbHost | quote }}
-  DB_NAME: {{ .Values.config.dbName | quote }}
-  DB_PASS: {{ .Values.config.dbPass | quote }}
   DB_PORT: {{ .Values.config.dbPort | quote }}
-  DB_USERNAME: {{ .Values.config.dbUsername | quote }}
   DEBUG: {{ .Values.config.debug | quote }}
   SECRET_KEY: {{ .Values.config.secretKey | quote }}
