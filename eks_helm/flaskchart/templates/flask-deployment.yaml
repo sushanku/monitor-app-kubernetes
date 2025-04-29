@@ -27,8 +27,8 @@ spec:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
-          - secretRef:
-              name: {{ include "flaskchart.fullname" . }}-monitor-secret
+          # - secretRef:
+          #     name: {{ include "flaskchart.fullname" . }}-monitor-secret
           - configMapRef:
               name: {{ include "flaskchart.fullname" . }}-config
         resources: {{- toYaml .Values.monitor.flask.resources | nindent 10 }}
