@@ -13,7 +13,7 @@ spec:
   project: {{ default "default" $application.project }}
   destination:
     server: {{ $root.Values.spec.destination.server }}
-    namespace: monitoring
+    namespace: default
   source:
     repoURL: {{ $root.Values.spec.source.repoURL }}
     targetRevision: {{ $root.Values.spec.source.targetRevision }}
