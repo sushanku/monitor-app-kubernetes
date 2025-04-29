@@ -1,0 +1,16 @@
+environment: development
+
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/sushanku/monitor-app-kubernetes.git
+    targetRevision: main
+
+applications:
+  - name: flaskchart
+    valueFiles:
+      - values.yaml
+  - name: postgreschart
+    valueFiles:
+      - values.yaml
