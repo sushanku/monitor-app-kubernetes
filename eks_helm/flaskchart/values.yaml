@@ -14,18 +14,18 @@ monitor:
       repository: sushanku/flask-monitor-app-v4
       tag: latest
     port:
-      containerPort: 5001
+      containerPort: 5000
     resources:
       limits:
         cpu: "1"
         memory: 512Mi
       requests:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 512Mi
   replicas: 1
 service:
   ports:
-  - port: 81
+  - port: 80
     protocol: TCP
     targetPort: 5000
   type: LoadBalancer
