@@ -5,6 +5,16 @@ metadata:
   labels:
     app: postgres
   {{- include "postgreschart.labels" . | nindent 4 }}
+  annotations:
+    notifications.argoproj.io/subscriptions: |
+      - trigger: [on-created, on-deployed, on-deleted, on-sync-succeeded, on-scaling-replica-set, on-rollout-updated, on-rollout-step-completed]
+        destinations:
+          - service: slack
+            recipients: [my_channel]
+      - trigger: [on-rollout-aborted, on-analysis-run-failed, on-analysis-run-error]
+        destinations:
+          - service: slack
+            recipients: [my_channel]
 spec:
   replicas: {{ .Values.postgres.replicas }}
   selector:
