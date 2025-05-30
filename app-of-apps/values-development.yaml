@@ -7,10 +7,14 @@ spec:
     repoURL: https://github.com/sushanku/monitor-app-kubernetes.git
     targetRevision: main
 
+notify_channel: my_channel
+
 applications:
   - name: flaskchart
     valueFiles:
       - values.yaml
+    notify_channel: my_channel
   - name: postgreschart
     valueFiles:
       - values.yaml
+    notify_channel: my_channel
