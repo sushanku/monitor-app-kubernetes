@@ -72,7 +72,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -123,7 +123,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "expr": "round(sum(rate(hubble_http_requests_total{reporter=~\"${reporter}\", destination_namespace=~\"${destination_namespace}\", destination_workload=~\"${destination_workload}\"}[$__rate_interval])), 0.001)",
             "refId": "A"
@@ -135,7 +135,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -187,7 +187,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -204,7 +204,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -283,7 +283,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -296,7 +296,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -310,7 +310,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -341,7 +341,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -422,7 +422,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -439,7 +439,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -520,7 +520,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -537,7 +537,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -618,7 +618,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": true,
@@ -631,7 +631,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": true,
@@ -645,7 +645,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": true,
@@ -676,7 +676,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -757,7 +757,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -774,7 +774,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -855,7 +855,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": false,
@@ -872,7 +872,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "mimir"
         },
         "fieldConfig": {
           "defaults": {
@@ -952,7 +952,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": true,
@@ -965,7 +965,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": true,
@@ -979,7 +979,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "mimir"
             },
             "editorMode": "code",
             "exemplar": true,
@@ -1020,7 +1020,7 @@
           "current": {},
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "mimir"
           },
           "definition": "label_values(hubble_http_requests_total, cluster)",
           "hide": 0,
@@ -1043,7 +1043,7 @@
           "current": {},
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "mimir"
           },
           "definition": "label_values(hubble_http_requests_total{cluster=~\"${cluster}\"}, destination_namespace)",
           "description": "",
@@ -1067,7 +1067,7 @@
           "current": {},
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "mimir"
           },
           "definition": "label_values(hubble_http_requests_total{cluster=~\"${cluster}\", destination_namespace=~\"${destination_namespace}\"}, destination_workload)",
           "hide": 0,
@@ -1090,7 +1090,7 @@
           "current": {},
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "mimir"
           },
           "definition": "label_values(hubble_http_requests_total, reporter)",
           "hide": 0,
@@ -1113,7 +1113,7 @@
           "current": {},
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "mimir"
           },
           "definition": "label_values(hubble_http_requests_total{cluster=~\"${cluster}\", destination_namespace=~\"${destination_namespace}\", destination_workload=~\"${destination_workload}\"}, source_namespace)",
           "hide": 0,
@@ -1136,7 +1136,7 @@
           "current": {},
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "mimir"
           },
           "definition": "label_values(hubble_http_requests_total{cluster=~\"${cluster}\", destination_namespace=~\"${destination_namespace}\", destination_workload=~\"${destination_workload}\", source_namespace=~\"${source_namespace}\"}, source_workload)",
           "hide": 0,
