@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: monitor-app-tls
+  namespace: istio-ingress        # MUST be in istio-ingress — Gateway reads it from here
+spec:
+  secretName: monitor-app-tls
+  duration: 2160h
+  renewBefore: 360h
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  dnsNames:
+    - monitor.example.com
+  issuerRef:
+    name: letsencrypt-prod        # your existing ClusterIssuer
+    kind: ClusterIssuer

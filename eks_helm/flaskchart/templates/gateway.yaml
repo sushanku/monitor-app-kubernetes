@@ -1,0 +1,31 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: monitor-app-gateway
+  namespace: istio-ingress
+  annotations:
+    # ExternalDNS reads this and creates the Route53 record automatically
+    external-dns.alpha.kubernetes.io/hostname: "monitor.example.com"
+spec:
+  selector:
+    istio: ingress-gateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "monitor.example.com"
+      tls:
+        httpsRedirect: true         # HTTP → HTTPS 301, replaces ALB ssl-redirect
+
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - "monitor.example.com"
+      tls:
+        mode: SIMPLE
+        credentialName: monitor-app-tls   # references the cert-manager secret above
+        minProtocolVersion: TLSV1_2

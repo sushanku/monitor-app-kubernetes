@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: monitor-app-vs
+  namespace: monitor-app
+spec:
+  hosts:
+    - "monitor.example.com"
+  gateways:
+    - istio-ingress/monitor-app-gateway   # references gateway above
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: flaskapp-service        # matches your Flask Service name exactly
+            port:
+              number: 80
+      timeout: 30s
+      retries:
+        attempts: 3
+        perTryTimeout: 10s
+        retryOn: gateway-error,connect-failure,retriable-4xx
