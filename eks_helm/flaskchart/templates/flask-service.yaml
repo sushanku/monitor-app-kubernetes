@@ -10,4 +10,4 @@ spec:
     app: flask-monitor
   ports:
 	{{- .Values.service.ports | toYaml | nindent 2 }}
-  type: "LoadBalancer"
+  type: "ClusterIP"

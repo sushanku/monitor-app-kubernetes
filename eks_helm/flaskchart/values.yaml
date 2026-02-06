@@ -11,7 +11,7 @@ kubernetesClusterDomain: cluster.local
 monitor:
   flask:
     image:
-      repository: sushanku/flask-monitor-app-v4
+      repository: sushanku/flask-monitor-app-new
       tag: latest
     port:
       containerPort: 5000
@@ -28,4 +28,19 @@ service:
   - port: 80
     protocol: TCP
     targetPort: 5000
-  type: LoadBalancer
+    name: http
+  type: ClusterIP
+
+# podPlacement:
+#   affinity:
+#     nodeAffinity:
+#       requiredDuringSchedulingIgnoredDuringExecution:
+#         nodeSelectorTerms:
+#           - matchExpressions:
+#               - key: "node-role/memory-intensive"
+#                 operator: Exists
+#   tolerations:
+#     - key: "MemoryIntensiveOnly"
+#       operator: "Equal"
+#       value: "true"
+#       effect: "NoSchedule"

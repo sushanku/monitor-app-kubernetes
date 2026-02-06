@@ -24,3 +24,17 @@ pvc:
   pvc:
     storageClass: gp2
     storageRequest: 1Gi
+
+# podPlacement:
+#   affinity:
+#     nodeAffinity:
+#       requiredDuringSchedulingIgnoredDuringExecution:
+#         nodeSelectorTerms:
+#           - matchExpressions:
+#               - key: "node-role/memory-intensive"
+#                 operator: Exists
+#   tolerations:
+#     - key: "MemoryIntensiveOnly"
+#       operator: "Equal"
+#       value: "true"
+#       effect: "NoSchedule"
