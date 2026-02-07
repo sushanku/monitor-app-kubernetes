@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: postgres-dr
+  namespace: monitor-app
+spec:
+  host: postgres                  # matches your Postgres Service name exactly
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL          # Flask sidecar upgrades to mTLS automatically
+    connectionPool:
+      tcp:
+        maxConnections: 10        # Postgres doesn't need many connections
+        connectTimeout: 5s
+    outlierDetection:
+      consecutive5xxErrors: 3
+      interval: 30s
+      baseEjectionTime: 30s

@@ -1,0 +1,11 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: monitor-app-strict-mtls
+  namespace: monitor-app
+spec:
+  mtls:
+    mode: STRICT
+  # One exception: Postgres port stays in STRICT too since
+  # Flask's sidecar will handle mTLS — not the app itself.
+  # Flask connects to postgres:5432, Envoy intercepts and upgrades to mTLS.

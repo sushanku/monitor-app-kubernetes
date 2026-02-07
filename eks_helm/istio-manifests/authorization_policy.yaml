@@ -1,0 +1,35 @@
+# # Deny everything to Postgres by default
+# apiVersion: security.istio.io/v1beta1
+# kind: AuthorizationPolicy
+# metadata:
+#   name: postgres-deny-all
+#   namespace: monitor-app
+# spec:
+#   selector:
+#     matchLabels:
+#       app: postgres
+#   action: DENY
+#   rules:
+#     - {}    # empty rule = deny all
+
+---
+# Then explicitly allow only Flask
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: postgres-allow-flask
+  namespace: monitor-app
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            # Flask pod's service account identity in the mesh
+            principals:
+              - "cluster.local/ns/monitor-app/sa/default"
+      to:
+        - operation:
+            ports: ["5432"]
