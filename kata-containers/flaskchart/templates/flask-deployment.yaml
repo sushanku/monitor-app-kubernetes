@@ -17,6 +17,7 @@ spec:
         app: flask-monitor
       {{- include "flaskchart.selectorLabels" . | nindent 8 }}
     spec:
+      runtimeClassName: kata-qemu
       nodeSelector:
         kata: "true"
       tolerations:
