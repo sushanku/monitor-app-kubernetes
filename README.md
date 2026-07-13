@@ -1,31 +1,28 @@
-# monitor-app-kubernetes 
-**App Info**: This simple application allows you to upload the file and monitors those uploaded file.
-A guide on deploying this simple server's file monitoring app which uses flask and postgres. 
+# monitor-app-kubernetes
+
+**App Info**: This simple application allows you to upload files and monitor them.
+A guide on deploying this Flask + Postgres file monitoring app on Kubernetes — now enhanced with **Kata Containers** and **gVisor** for stronger workload isolation.
 
 ---
 
 ## Directory guide
-- **monitor-app**: Flask application with Dockerfile to build the Docker image. This app monitors the information of uploaded file from the dashboard and provides the information of uploaded file in the dashboard. 
-- **flask-kube**: Kubernetes manifests file to create Flask deployment with services and configmap
-- **postgres-kube**: Kubernetes manifests file to create Stateful postgres DB application with service, configmap, persistent volume, and persistent volume claim
+
+* **monitor-app**: Flask application with Dockerfile to build the Docker image
+* **flask-kube**: Kubernetes manifests for Flask deployment, service, and configmap
+* **postgres-kube**: Kubernetes manifests for PostgreSQL StatefulSet, service, PV, PVC, configmap
 
 ---
 
 ## Prerequisite
-- Docker 
-- Kubernetes cluster 
 
-For testing purpose you may use Docker Desktop in which Kubernetes is installed.
+* Docker
+* Kubernetes cluster
+
+For testing, you may use Docker Desktop with Kubernetes enabled.
 
 ---
 
 ## Build Docker Image
-1. First clone this repository and change the application directory.
-2. Build docker image (`docker build -t ${tagname} .`)
-3. Push image to your dockerhub account. (`docker push ${tagname}`)
-   
-Note the image tag name here. This image tag name will be used in Kubernetes manifest file for flask.  
-cmdline instructions to build and push docker image:  
 
 ```
 cd monitor-app
@@ -35,54 +32,227 @@ docker push sushanku/flask-monitor-app:latest
 
 ---
 
-## Deploy flask app in your Kubernetes cluster
-This flask app is first built with Docker and pushed it to the public dockerhub registry. Then, Kubernetes will pull the docker image from the dockerhub and create a deployment pods.  
-You can increase the replica in deployment manifest file but the app stores some data like uploaded files and profile picture. For now to make it simple, let's deploy pods with 1 replica only.  
-This app also needs the environment variables like Database host, port, username, password etc which is handled by configMap resources. configMap allows you to decouple your hardcorded environment variable in the application code. For username, password or any critical information it is best to use Kuberenetes secret resource or Hashicorp vault.  
-To expose the app locally, `loadbalancer` service type is used. This exposes your appilcation in `localhost:5000`. You may learn more about exposing your services using different ports and service type here. [Networking Service](https://kubernetes.io/docs/concepts/services-networking/service/)
+# 🚀 Deploy Flask App
 
-**Note:** Do not forget to change the volume path in postgres-volume.yaml.  
-Make sure the directory exists. Here is the reference  `path: "/Users/example/Desktop/kubedata"`
-
-Lets create the flask config, service and deployment 
 ```
 kubectl apply -f flask-kube
 ```
-The above kubectl apply command will apply all the manifests file in flask-kube directory.
+
+This will:
+
+* Create Deployment
+* Create Service (`LoadBalancer`)
+* Inject environment variables via ConfigMap
 
 ---
 
-## Deploy postgres DB in your Kubernetes cluster
-This postgress app uses a statefulset controller to deploy the stateful pods which have the persistent storage and a network.  
-  
-This app also needs the environment variables like Database username and password etc which is handled by configMap resources.Same username and password info should be given to the configMap of the flask. configMap allows you to decouple your hardcorded environment variable in the application code. For username, password or any critical information it is best to use Kuberenetes secret resource or Hashicorp vault.  
-  
-To expose the postgres DB within a cluster, postgres service manifest file is created. This will create a service accessible within a cluster by a DNS name `postgres`. This DNS name is then fed into the Flask deployment which needs to know the DB_HOST as a environment variable.  
-  
-A PersistentVolume (PV) is a piece of storage in your cluster that helps to persist your container database to your local storage.For that you need to have a persistent volume and persistent volume claim. You may also use different types of other storage. Learn more about pv and pvc  [persistent-volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
-  
-Lets create the postgres pv, pvc, config, service and deployment 
+# 🐘 Deploy PostgreSQL
+
 ```
-kubectl apply -f flask-postgres
+kubectl apply -f postgres-kube
 ```
-The above kubectl apply command will apply all the manifests file in postgres-kube directory.
+
+This will:
+
+* Create StatefulSet
+* Create PV & PVC
+* Create internal Service (`postgres`)
 
 ---
 
-## Endpoints
-- **sign up**: http://localhost:5000/register  
-  Sign Up page
-- **login**: http://localhost:5000/login  
-  Login page
-- **file list**: http://localhost:5000/file_list.html  
-  Page from where you can upload the file. This same page will display the uploaded file information(name, filesize, filetype, action to delete the file)
-- **dashboard**: http://localhost:5000/dashboard.html  
-  Dashboard where uploaded file count will be displayed on the basis of daily, weekly, monthly.
+# 🔐 Advanced Runtime Isolation (Kata Containers & gVisor)
+
+This project supports **two advanced container runtimes**:
+
+| Runtime             | Isolation Type            | Use Case                                  |
+| ------------------- | ------------------------- | ----------------------------------------- |
+| **Kata Containers** | Lightweight VM (QEMU)     | Strong isolation (multi-tenant workloads) |
+| **gVisor**          | User-space kernel (runsc) | Balanced security + performance           |
 
 ---
 
-## TO DO's
-These are the few suggestions for the enhancement of this application
-- You may use kuberenetes resource `secret` for your DB username and DB password both in flask and postgres or You may use Hashicorp vault.
-- Make a helm charts of this application and deploy it using helm
-- Decouple the CI and CD part, CI=> Integrate your code using some pipeline(Jenkins, github action, gitlab ci/cd). CD=> Deploy using GitOps Approach(ArgoCD)
+# 🧊 Kata Containers Setup
+
+Kata Containers run each pod inside a **microVM**.
+
+### Runtime Configuration (containerd)
+
+Ensure containerd is configured:
+
+```toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-qemu]
+  runtime_type = "io.containerd.kata-qemu.v2"
+```
+
+---
+
+### Example Deployment Config (Kata)
+
+```yaml
+runtimeClassName: kata-qemu
+nodeSelector:
+  kata: "true"
+tolerations:
+- key: "kata"
+  operator: "Equal"
+  value: "true"
+  effect: "NoSchedule"
+```
+
+---
+
+# 🟣 gVisor Setup
+
+⚠️ **Important:** gVisor must be installed on **every worker node** where it will run.
+
+---
+
+## Step 1: Install runsc (gVisor runtime)
+
+Install `runsc` binary on each node.
+
+---
+
+## Step 2: Configure containerd
+
+Edit:
+
+```
+/etc/containerd/config.toml
+```
+
+Add:
+
+```toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.gvisor]
+  runtime_type = "io.containerd.runsc.v1"
+```
+
+Restart containerd:
+
+```
+sudo systemctl restart containerd
+```
+
+---
+
+## Step 3: Create RuntimeClass
+
+```yaml
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: gvisor
+handler: gvisor
+```
+
+---
+
+## Example Deployment Config (gVisor)
+
+```yaml
+runtimeClassName: gvisor
+nodeSelector:
+  gvisor: "true"
+tolerations:
+- key: "gvisor"
+  operator: "Equal"
+  value: "true"
+  effect: "NoSchedule"
+```
+
+---
+
+# ⚠️ Node Isolation Best Practice (VERY IMPORTANT)
+
+When using **multiple runtimes (Kata + gVisor)**:
+
+👉 **DO NOT schedule them on the same nodes without control**
+
+---
+
+## ✅ Recommended Approach
+
+### Label nodes:
+
+```bash
+kubectl label node <node-name> kata=true
+kubectl label node <node-name> gvisor=true
+```
+
+---
+
+### Taint nodes:
+
+```bash
+kubectl taint nodes <kata-node> kata=true:NoSchedule
+kubectl taint nodes <gvisor-node> gvisor=true:NoSchedule
+```
+
+---
+
+## 🧠 Why this matters
+
+* Prevents runtime conflicts
+* Ensures predictable scheduling
+* Avoids debugging nightmares
+* Enforces workload isolation boundaries
+
+---
+
+## 🎯 Final Scheduling Model
+
+| Node Type     | Runtime         | Workloads                  |
+| ------------- | --------------- | -------------------------- |
+| kata nodes    | Kata Containers | High-security workloads    |
+| gvisor nodes  | gVisor          | Medium-security workloads  |
+| default nodes | runc            | Trusted/internal workloads |
+
+---
+
+# 🔍 Verifying Runtime
+
+### Check runtime:
+
+```bash
+sudo crictl inspect <container-id> | grep runtimeType
+```
+
+---
+
+### Check VM (Kata):
+
+```bash
+ps aux | grep qemu
+```
+
+---
+
+### Check kernel (important test):
+
+```bash
+kubectl exec -it <pod> -- uname -a
+```
+
+* Kata → different kernel (VM)
+* gVisor → same kernel but sandboxed
+* runc → host kernel
+
+---
+
+# 🌐 Endpoints
+
+* [http://localhost:5000/register](http://localhost:5000/register)
+* [http://localhost:5000/login](http://localhost:5000/login)
+* [http://localhost:5000/file_list.html](http://localhost:5000/file_list.html)
+* [http://localhost:5000/dashboard.html](http://localhost:5000/dashboard.html)
+
+---
+
+# 🧠 Summary
+
+You now have a **multi-runtime Kubernetes cluster**:
+
+* ✅ runc (default containers)
+* 🟣 gVisor (user-space isolation)
+* 🧊 Kata Containers (VM-level isolation)
