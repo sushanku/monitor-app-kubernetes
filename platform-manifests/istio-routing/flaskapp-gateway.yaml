@@ -1,0 +1,27 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: flaskapp-gateway
+  namespace: default
+spec:
+  selector:
+    istio: ingress
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "myflaskapp.local"
+    tls:
+      httpsRedirect: true # Automatically forces HTTP over to HTTPS
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "myflaskapp.local"
+    tls:
+      mode: SIMPLE
+      credentialName: myflaskapp-local-tls-secret # Tells Envoy to use the cert-manager secret
+

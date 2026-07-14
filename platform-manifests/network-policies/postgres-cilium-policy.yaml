@@ -1,0 +1,19 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: secure-postgres-access
+  namespace: default # Where your pods are running
+spec:
+  # Target the Postgres database pod
+  endpointSelector:
+    matchLabels:
+      app: postgres # Match your postgres pod label
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        app.kubernetes.io/instance: flaskapp # ONLY allow pods with this label
+    toPorts:
+    - ports:
+      - port: "5432"
+        protocol: TCP
+

@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: local-selfsigned-issuer
+  namespace: istio-ingress # Must live where your Ingress Gateway lives
+spec:
+  selfSigned: {} # Instructs cert-manager to sign its own certs
+

@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: myflaskapp-local-cert
+  namespace: istio-ingress # MUST match your Ingress namespace
+spec:
+  secretName: myflaskapp-local-tls-secret # The name of the secret Istio will read
+  dnsNames:
+  - "myflaskapp.local" # Your local /etc/hosts domain
+  issuerRef:
+    name: local-selfsigned-issuer
+    kind: Issuer
+
